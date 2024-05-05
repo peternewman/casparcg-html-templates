@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CasparCG Weather Map Template</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="js/monkeecreate-jquery.simpleWeather-0d95e82/jquery.simpleWeather.js"></script>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="js/skycons.js"></script>
+        <script src="js/casparcg.js"></script>
+        
+        <link href="styles.css" rel='stylesheet'>
+    </head>
+    <body style="background-color:white;">
+        <h2 class="center forecast-header">Weather Map</h2>
+<section>
+<div id="canvasesDiv" style="position: absolute; top: 0; right: 1000px;">
+<!-- style="position:relative; width:400px; height:300px" -->
+<canvas id="map"
+style="z-index: 2;
+position:absolute;
+left:0px;
+top:0px;
+" height="1080px" width="900">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons1"
+style="z-index: 3;
+position:absolute;
+left:400px;
+top:100px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons2"
+style="z-index: 3;
+position:absolute;
+left:500px;
+top:175px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons3"
+style="z-index: 3;
+position:absolute;
+left:400px;
+top:300px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons4"
+style="z-index: 3;
+position:absolute;
+left:500px;
+top:450px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons5"
+style="z-index: 3;
+position:absolute;
+left:575px;
+top:600px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons6"
+style="z-index: 3;
+position:absolute;
+left:750px;
+top:700px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons7"
+style="z-index: 3;
+position:absolute;
+left:475px;
+top:700px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons8"
+style="z-index: 3;
+position:absolute;
+left:675px;
+top:800px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons9"
+style="z-index: 3;
+position:absolute;
+left:275px;
+top:475px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+<canvas id="skycons10"
+style="z-index: 3;
+position:absolute;
+left:500px;
+top:875px;
+" height="100px" width="100">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+</div>
+
+<script type="text/javascript">
+var skycons;
+
+var ctx2;
+var map = new Image();
+
+function init() {
+map.src ="images/950px-crop-British_Isles_map.svg.png";
+mapLayer = document.getElementById("map");
+mapCtx = mapLayer.getContext("2d");
+setInterval(drawAll, 20);
+
+skycons = new Skycons({"monochrome": false});
+skycons.play();
+
+skycons.set(document.getElementById("skycons1"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons2"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons3"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons4"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons5"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons6"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons7"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons8"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons9"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+skycons.set(document.getElementById("skycons10"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+}
+
+function drawAll() {
+drawMap();
+}
+
+function drawMap() {
+mapCtx.clearRect(0, 0, 900, 1080);
+mapCtx.drawImage(map, 0, 0);
+}
+
+init();
+</script>
+</section>
+        <script>
+            if (window.location.hash == "#demo") {
+                update("{}");
+            }
+        </script>
+    </body>
+</html>
