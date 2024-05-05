@@ -143,9 +143,5 @@ function update(arg) {
 
     var json = JSON.parse(arg);
     weather.zipcode = json.zipcode;
-    if (window.location.hash === "#demo") {
-        weather.demo();
-    } else {
-        weather.fetch(json.zipcode);
-    }
+    weather.demo();
 }
