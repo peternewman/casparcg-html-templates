@@ -18,27 +18,16 @@
     <body style="background-color:white;">
         <h2 class="center forecast-header">Weather Map</h2>
 <section>
-<div id="canvasesDiv" style="position: absolute; top: 0; right: 1000px;">
+<div id="canvasesDiv" style="position: absolute; top: 0; right: 700px;">
 <!-- style="position:relative; width:400px; height:300px" -->
 <canvas id="map"
 style="z-index: 2;
 position:absolute;
 left:0px;
 top:0px;
-" height="1080px" width="900">
+" height="1024px" width="663">
 This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
-<div class="locator" id="locator1" style="left: 400px; top: 200px;">Foo Bag</div>
-<canvas class="skycon" id="skycons1" style="left: 400px; top: 100px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons2" style="left: 500px; top: 175px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons3" style="left: 400px; top: 300px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons4" style="left: 500px; top: 450px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons5" style="left: 575px; top: 600px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons6" style="left: 750px; top: 700px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons7" style="left: 475px; top: 700px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons8" style="left: 675px; top: 800px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons9" style="left: 275px; top: 475px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons10" style="left: 500px; top: 875px;">No HTML5 Canvas</canvas>
 </div>
 
 <script type="text/javascript">
@@ -48,7 +37,7 @@ var ctx2;
 var map = new Image();
 
 function init() {
-map.src ="images/950px-crop-British_Isles_map.svg.png";
+map.src = "images/663px-United_Kingdom_adm_location_map.svg.png";
 mapLayer = document.getElementById("map");
 mapCtx = mapLayer.getContext("2d");
 
@@ -98,16 +87,60 @@ var mapRedrawInterval = requestInterval(drawAll, 1000 / 60);
 skycons = new Skycons({"monochrome": false});
 skycons.play();
 
-skycons.set(document.getElementById("skycons1"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons2"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons3"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons4"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons5"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons6"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons7"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons8"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons9"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons10"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+var skycon_size = 75;
+var half_skycon_size = Math.floor(skycon_size / 2);
+var map_latitude_start = 61;
+var map_latitude_end = 49;
+var map_longitude_start = -11;
+var map_longitude_end = 2.2;
+var map_width = 663;
+var map_height = 1024;
+
+var locationData = [
+	{'lat': 51.507222, 'lng': -0.1275, 'loc': 'London'},
+	{'lat': 55.861111, 'lng': -4.25, 'loc': 'Glasgow'},
+//	{'lat': 55.953333, 'lng': -3.189167, 'loc': 'Edinburgh'},
+	{'lat': 54.596389, 'lng': -5.93, 'loc': 'Belfast'},
+//	{'lat': 52.4793, 'lng': -1.9029, 'loc': 'Birmingham'},
+	{'lat': 53.479, 'lng': -2.2452, 'loc': 'Manchester'},
+	{'lat': 54.978, 'lng': -1.6102, 'loc': 'Newcastle'},
+	{'lat': 51.483333, 'lng': -3.183333 , 'loc': 'Cardiff'},
+	{'lat': 50.068611, 'lng': -5.716111, 'loc': "Land's End"},
+	{'lat': 57.4778, 'lng': -4.2247, 'loc': 'Inverness'},
+	{'lat': 52.628611, 'lng': 1.292778, 'loc': 'Norwich'},
+	{'lat': 60.333333, 'lng': -1.333333, 'loc': 'Shetland'},
+]
+
+for (let i = 0; i < locationData.length; i++) {
+	// Equirectangular projection
+
+	// longitude: just scale and shift
+	x = ((locationData[i].lng - map_longitude_start)/(map_longitude_end - map_longitude_start))*map_width;
+
+	// latitude: just scale and shift
+	y = ((locationData[i].lat - map_latitude_start)/(map_latitude_end - map_latitude_start))*map_height;
+
+	// Add the skycon
+	locationData[i].canvas = document.createElement("canvas");
+	locationData[i].canvas.className  = "skycon";
+	//locationData[i].canvas.id = "skycon" + (i + 1);
+	locationData[i].canvas.style.width = skycon_size + "px";
+	locationData[i].canvas.style.height = skycon_size + "px";
+	locationData[i].canvas.style.left = (x - half_skycon_size) + "px";
+	locationData[i].canvas.style.top = (y - half_skycon_size) + "px";
+	document.getElementById("canvasesDiv").appendChild(locationData[i].canvas);
+	skycons.add(locationData[i].canvas, skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+
+	// Add the locator
+	locationData[i].div = document.createElement("div");
+	locationData[i].div.className  = "locator";
+	//locationData[i].div.id = "locator" + (i + 1);
+	locationData[i].div.style.marginTop = skycon_size + "px";
+	locationData[i].div.style.left = x + "px";
+	locationData[i].div.style.top = (y - half_skycon_size) + "px";
+	locationData[i].div.innerHTML = locationData[i].loc;
+	document.getElementById("canvasesDiv").appendChild(locationData[i].div);
+}
 }
 
 function drawAll() {

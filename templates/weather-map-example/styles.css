@@ -5,10 +5,7 @@ body {
 .skycon {
 	z-index: 3;
 	position: absolute;
-	height: 100px;
-	width: 100px;
 }
-
 
 .locator {
 	position: absolute;
@@ -20,4 +17,5 @@ body {
 	padding: 0px 5px;
 	font-weight: bold;
 	border-radius: 15px;
+	transform: translate(-50%, 0);
 }
