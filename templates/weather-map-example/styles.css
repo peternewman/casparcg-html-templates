@@ -1,3 +1,23 @@
 body {
     overflow: hidden;
 }
+
+.skycon {
+	z-index: 3;
+	position: absolute;
+	height: 100px;
+	width: 100px;
+}
+
+
+.locator {
+	position: absolute;
+	z-index: 4;
+	color: white;
+	background-color: green;
+	font-size: 25px;
+	white-space: nowrap;
+	padding: 0px 5px;
+	font-weight: bold;
+	border-radius: 15px;
+}
