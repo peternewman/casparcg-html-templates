@@ -18,14 +18,14 @@
     <body style="background-color:white;">
         <h2 class="center forecast-header">Weather Map</h2>
 <section>
-<div id="canvasesDiv" style="position: absolute; top: 0; right: 1000px;">
+<div id="canvasesDiv" style="position: absolute; top: 0; right: 700px;">
 <!-- style="position:relative; width:400px; height:300px" -->
 <canvas id="map"
 style="z-index: 2;
 position:absolute;
 left:0px;
 top:0px;
-" height="1080px" width="900">
+" height="1024px" width="663">
 This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
 </div>
@@ -37,7 +37,7 @@ var ctx2;
 var map = new Image();
 
 function init() {
-map.src ="images/950px-crop-British_Isles_map.svg.png";
+map.src = "images/663px-United_Kingdom_adm_location_map.svg.png";
 mapLayer = document.getElementById("map");
 mapCtx = mapLayer.getContext("2d");
 
@@ -87,26 +87,47 @@ var mapRedrawInterval = requestInterval(drawAll, 1000 / 60);
 skycons = new Skycons({"monochrome": false});
 skycons.play();
 
+var skycon_size = 75;
+var half_skycon_size = Math.floor(skycon_size / 2);
+var map_latitude_start = 61;
+var map_latitude_end = 49;
+var map_longitude_start = -11;
+var map_longitude_end = 2.2;
+var map_width = 663;
+var map_height = 1024;
+
 var locationData = [
-	{'lat': 400, 'long': 100, 'loc': 'Foo Bag'},
-	{'lat': 500, 'long': 175, 'loc': ''},
-	{'lat': 400, 'long': 300, 'loc': ''},
-	{'lat': 500, 'long': 450, 'loc': ''},
-	{'lat': 575, 'long': 600, 'loc': ''},
-	{'lat': 750, 'long': 700, 'loc': ''},
-	{'lat': 475, 'long': 700, 'loc': ''},
-	{'lat': 675, 'long': 800, 'loc': ''},
-	{'lat': 275, 'long': 475, 'loc': ''},
-	{'lat': 500, 'long': 875, 'loc': ''},
+	{'lat': 51.507222, 'lng': -0.1275, 'loc': 'London'},
+	{'lat': 55.861111, 'lng': -4.25, 'loc': 'Glasgow'},
+//	{'lat': 55.953333, 'lng': -3.189167, 'loc': 'Edinburgh'},
+	{'lat': 54.596389, 'lng': -5.93, 'loc': 'Belfast'},
+//	{'lat': 52.4793, 'lng': -1.9029, 'loc': 'Birmingham'},
+	{'lat': 53.479, 'lng': -2.2452, 'loc': 'Manchester'},
+	{'lat': 54.978, 'lng': -1.6102, 'loc': 'Newcastle'},
+	{'lat': 51.483333, 'lng': -3.183333 , 'loc': 'Cardiff'},
+	{'lat': 50.068611, 'lng': -5.716111, 'loc': "Land's End"},
+	{'lat': 57.4778, 'lng': -4.2247, 'loc': 'Inverness'},
+	{'lat': 52.628611, 'lng': 1.292778, 'loc': 'Norwich'},
+	{'lat': 60.333333, 'lng': -1.333333, 'loc': 'Shetland'},
 ]
 
 for (let i = 0; i < locationData.length; i++) {
+	// Equirectangular projection
+
+	// longitude: just scale and shift
+	x = ((locationData[i].lng - map_longitude_start)/(map_longitude_end - map_longitude_start))*map_width;
+
+	// latitude: just scale and shift
+	y = ((locationData[i].lat - map_latitude_start)/(map_latitude_end - map_latitude_start))*map_height;
+
 	// Add the skycon
 	locationData[i].canvas = document.createElement("canvas");
 	locationData[i].canvas.className  = "skycon";
 	//locationData[i].canvas.id = "skycon" + (i + 1);
-	locationData[i].canvas.style.left = locationData[i].lat + "px";
-	locationData[i].canvas.style.top = locationData[i].long + "px";
+	locationData[i].canvas.style.width = skycon_size + "px";
+	locationData[i].canvas.style.height = skycon_size + "px";
+	locationData[i].canvas.style.left = (x - half_skycon_size) + "px";
+	locationData[i].canvas.style.top = (y - half_skycon_size) + "px";
 	document.getElementById("canvasesDiv").appendChild(locationData[i].canvas);
 	skycons.add(locationData[i].canvas, skyconMap[Math.floor(Math.random() * skyconMap.length)]);
 
@@ -114,8 +135,9 @@ for (let i = 0; i < locationData.length; i++) {
 	locationData[i].div = document.createElement("div");
 	locationData[i].div.className  = "locator";
 	//locationData[i].div.id = "locator" + (i + 1);
-	locationData[i].div.style.left = locationData[i].lat + "px";
-	locationData[i].div.style.top = locationData[i].long + "px";
+	locationData[i].div.style.marginTop = skycon_size + "px";
+	locationData[i].div.style.left = x + "px";
+	locationData[i].div.style.top = (y - half_skycon_size) + "px";
 	locationData[i].div.innerHTML = locationData[i].loc;
 	document.getElementById("canvasesDiv").appendChild(locationData[i].div);
 }
