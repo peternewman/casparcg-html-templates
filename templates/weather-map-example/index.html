@@ -28,86 +28,17 @@ top:0px;
 " height="1080px" width="900">
 This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
-<canvas id="skycons1"
-style="z-index: 3;
-position:absolute;
-left:400px;
-top:100px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons2"
-style="z-index: 3;
-position:absolute;
-left:500px;
-top:175px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons3"
-style="z-index: 3;
-position:absolute;
-left:400px;
-top:300px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons4"
-style="z-index: 3;
-position:absolute;
-left:500px;
-top:450px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons5"
-style="z-index: 3;
-position:absolute;
-left:575px;
-top:600px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons6"
-style="z-index: 3;
-position:absolute;
-left:750px;
-top:700px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons7"
-style="z-index: 3;
-position:absolute;
-left:475px;
-top:700px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons8"
-style="z-index: 3;
-position:absolute;
-left:675px;
-top:800px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons9"
-style="z-index: 3;
-position:absolute;
-left:275px;
-top:475px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
-<canvas id="skycons10"
-style="z-index: 3;
-position:absolute;
-left:500px;
-top:875px;
-" height="100px" width="100">
-This text is displayed if your browser does not support HTML5 Canvas.
-</canvas>
+<div class="locator" id="locator1" style="left: 400px; top: 200px;">Foo Bag</div>
+<canvas class="skycon" id="skycons1" style="left: 400px; top: 100px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons2" style="left: 500px; top: 175px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons3" style="left: 400px; top: 300px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons4" style="left: 500px; top: 450px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons5" style="left: 575px; top: 600px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons6" style="left: 750px; top: 700px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons7" style="left: 475px; top: 700px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons8" style="left: 675px; top: 800px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons9" style="left: 275px; top: 475px;">No HTML5 Canvas</canvas>
+<canvas class="skycon" id="skycons10" style="left: 500px; top: 875px;">No HTML5 Canvas</canvas>
 </div>
 
 <script type="text/javascript">
@@ -120,7 +51,49 @@ function init() {
 map.src ="images/950px-crop-British_Isles_map.svg.png";
 mapLayer = document.getElementById("map");
 mapCtx = mapLayer.getContext("2d");
-setInterval(drawAll, 20);
+
+// From Color Skycons
+  /* Set up a RequestAnimationFrame shim so we can animate efficiently FOR
+   * GREAT JUSTICE. */
+  var requestInterval, cancelInterval;
+
+  (function() {
+    var raf = window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ,
+        caf = window.cancelAnimationFrame        ||
+              window.webkitCancelAnimationFrame  ||
+              window.mozCancelAnimationFrame     ||
+              window.oCancelAnimationFrame       ||
+              window.msCancelAnimationFrame      ;
+
+    if(raf && caf) {
+      requestInterval = function(fn, delay) {
+        var handle = {value: null};
+
+        function loop() {
+          handle.value = raf(loop);
+          fn();
+        }
+
+        loop();
+        return handle;
+      };
+
+      cancelInterval = function(handle) {
+        caf(handle.value);
+      };
+    }
+
+    else {
+      requestInterval = setInterval;
+      cancelInterval = clearInterval;
+    }
+  }());
+
+var mapRedrawInterval = requestInterval(drawAll, 1000 / 60);
 
 skycons = new Skycons({"monochrome": false});
 skycons.play();
@@ -142,7 +115,6 @@ drawMap();
 }
 
 function drawMap() {
-mapCtx.clearRect(0, 0, 900, 1080);
 mapCtx.drawImage(map, 0, 0);
 }
 
@@ -151,7 +123,7 @@ init();
 </section>
         <script>
             if (window.location.hash == "#demo") {
-                update("{}");
+                //update("{}");
             }
         </script>
     </body>
