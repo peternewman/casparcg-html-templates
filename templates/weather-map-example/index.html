@@ -28,17 +28,6 @@ top:0px;
 " height="1080px" width="900">
 This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
-<div class="locator" id="locator1" style="left: 400px; top: 200px;">Foo Bag</div>
-<canvas class="skycon" id="skycons1" style="left: 400px; top: 100px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons2" style="left: 500px; top: 175px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons3" style="left: 400px; top: 300px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons4" style="left: 500px; top: 450px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons5" style="left: 575px; top: 600px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons6" style="left: 750px; top: 700px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons7" style="left: 475px; top: 700px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons8" style="left: 675px; top: 800px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons9" style="left: 275px; top: 475px;">No HTML5 Canvas</canvas>
-<canvas class="skycon" id="skycons10" style="left: 500px; top: 875px;">No HTML5 Canvas</canvas>
 </div>
 
 <script type="text/javascript">
@@ -98,16 +87,38 @@ var mapRedrawInterval = requestInterval(drawAll, 1000 / 60);
 skycons = new Skycons({"monochrome": false});
 skycons.play();
 
-skycons.set(document.getElementById("skycons1"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons2"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons3"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons4"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons5"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons6"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons7"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons8"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons9"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
-skycons.set(document.getElementById("skycons10"), skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+var locationData = [
+	{'lat': 400, 'long': 100, 'loc': 'Foo Bag'},
+	{'lat': 500, 'long': 175, 'loc': ''},
+	{'lat': 400, 'long': 300, 'loc': ''},
+	{'lat': 500, 'long': 450, 'loc': ''},
+	{'lat': 575, 'long': 600, 'loc': ''},
+	{'lat': 750, 'long': 700, 'loc': ''},
+	{'lat': 475, 'long': 700, 'loc': ''},
+	{'lat': 675, 'long': 800, 'loc': ''},
+	{'lat': 275, 'long': 475, 'loc': ''},
+	{'lat': 500, 'long': 875, 'loc': ''},
+]
+
+for (let i = 0; i < locationData.length; i++) {
+	// Add the skycon
+	locationData[i].canvas = document.createElement("canvas");
+	locationData[i].canvas.className  = "skycon";
+	//locationData[i].canvas.id = "skycon" + (i + 1);
+	locationData[i].canvas.style.left = locationData[i].lat + "px";
+	locationData[i].canvas.style.top = locationData[i].long + "px";
+	document.getElementById("canvasesDiv").appendChild(locationData[i].canvas);
+	skycons.add(locationData[i].canvas, skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+
+	// Add the locator
+	locationData[i].div = document.createElement("div");
+	locationData[i].div.className  = "locator";
+	//locationData[i].div.id = "locator" + (i + 1);
+	locationData[i].div.style.left = locationData[i].lat + "px";
+	locationData[i].div.style.top = locationData[i].long + "px";
+	locationData[i].div.innerHTML = locationData[i].loc;
+	document.getElementById("canvasesDiv").appendChild(locationData[i].div);
+}
 }
 
 function drawAll() {
