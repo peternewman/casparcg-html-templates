@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CasparCG Weather Wall Template</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="js/skycons.js"></script>
+        <script src="js/casparcg.js"></script>
+        
+        <link href="styles.css" rel='stylesheet'>
+    </head>
+    <body style="background-color:white;">
+        <h2 class="center forecast-header">Weather Wall</h2>
+<section>
+<div id="canvasesDiv" style="position: absolute; top: 0; left: 0px;">
+<!-- style="position:relative; width:400px; height:300px" -->
+<canvas id="map"
+style="z-index: 2;
+position:absolute;
+left:0px;
+top:0px;
+" height="1080px" width="1920">
+This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+</div>
+
+<script type="text/javascript">
+var skycons;
+
+var ctx2;
+var map = new Image();
+
+function init() {
+// From Color Skycons
+  /* Set up a RequestAnimationFrame shim so we can animate efficiently FOR
+   * GREAT JUSTICE. */
+  var requestInterval, cancelInterval;
+
+  (function() {
+    var raf = window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ,
+        caf = window.cancelAnimationFrame        ||
+              window.webkitCancelAnimationFrame  ||
+              window.mozCancelAnimationFrame     ||
+              window.oCancelAnimationFrame       ||
+              window.msCancelAnimationFrame      ;
+
+    if(raf && caf) {
+      requestInterval = function(fn, delay) {
+        var handle = {value: null};
+
+        function loop() {
+          handle.value = raf(loop);
+          fn();
+        }
+
+        loop();
+        return handle;
+      };
+
+      cancelInterval = function(handle) {
+        caf(handle.value);
+      };
+    }
+
+    else {
+      requestInterval = setInterval;
+      cancelInterval = clearInterval;
+    }
+  }());
+
+skycons = new Skycons({"monochrome": false});
+skycons.play();
+
+var skycon_size = 75;
+var half_skycon_size = Math.floor(skycon_size / 2);
+var screen_width = 1920;
+var screen_height = 1080;
+
+for (let x = 0; x < screen_width; x=x+(skycon_size*2)) {
+	for (let y = 0; y < screen_height; y=y+(skycon_size)) {
+		// Add the skycon
+		var canvas = document.createElement("canvas");
+		canvas.className  = "skycon";
+		//canvas.id = "skycon" + (i + 1);
+		canvas.style.width = skycon_size + "px";
+		canvas.style.height = skycon_size + "px";
+		canvas.style.left = (x + (skycon_size * ((y/skycon_size) % 2))) + "px";
+		canvas.style.top = (y) + "px";
+		document.getElementById("canvasesDiv").appendChild(canvas);
+		skycons.add(canvas, skyconMap[Math.floor(Math.random() * skyconMap.length)]);
+	}
+}
+}
+
+function drawAll() {
+}
+
+init();
+</script>
+</section>
+        <script>
+            if (window.location.hash == "#demo") {
+                //update("{}");
+            }
+        </script>
+    </body>
+</html>
